@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "package": "net.ramgames.ramchants.mixins.client",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "EnchantmentScreenMixin",
+    "TooltipComponentMixin"
+  ],
+  "mixins": [
+    "ElytraItemMixin",
+    "EnchantedBookItemMixin",
+    "EnchantmentScreenHandlerMixin",
+    "ItemMixin",
+    "ItemStackMixin",
+    "PlayerEntityMixin",
+    "RangedWeaponMixin",
+    "TridentItemMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

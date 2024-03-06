@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "ramchants",
+  "version": "${version}",
+  "name": "RamChants",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/RamGemes/RamChants"
+  },
+  "license": "MIT",
+  "icon": "assets/ramchants/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.ramgames.ramchants.RamChantsClient"
+    ],
+    "main": [
+      "net.ramgames.ramchants.RamChants"
+    ]
+  },
+  "mixins": [
+    "ramchants.mixins.json",
+    {
+      "config": "ramchants.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
