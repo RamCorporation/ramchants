@@ -4,6 +4,18 @@
   "package": "net.ramgames.ramchants.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "DamageUtilMixin",
+    "ElytraItemMixin",
+    "EnchantedBookItemMixin",
+    "EnchantmentScreenHandlerMixin",
+    "ItemStackMixin",
+    "LightningRodBlockMixin",
+    "LivingEntityMixin",
+    "PlayerEntityMixin",
+    "RangedWeaponMixin",
+    "TridentEntityMixin",
+    "TridentItemMixin",
+    "WorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -3,6 +3,7 @@ package net.ramgames.ramchants;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NbtCompound;
+import net.ramgames.ramchants.enchantments.ModEnchantments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,7 @@ public class RamChants implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Ramchants is preparing something magical!");
+        ModEnchantments.onInitialize();
     }
 
     public static int totalEnchantmentsUsed(Map<Enchantment, Integer> enchantments) {

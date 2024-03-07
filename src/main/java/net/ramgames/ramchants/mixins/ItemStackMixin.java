@@ -1,5 +1,6 @@
-package net.ramgames.ramchants.mixins.client;
+package net.ramgames.ramchants.mixins;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -53,6 +54,7 @@ public abstract class ItemStackMixin implements FabricItemStack {
         if(newLevel != 0) enchants.add(EnchantmentHelper.createNbt(EnchantmentHelper.getEnchantmentId(enchantment), (byte) newLevel));
         ci.cancel();
     }
+
 
 
 }

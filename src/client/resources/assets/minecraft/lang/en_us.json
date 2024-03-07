@@ -1,3 +1,15 @@
 {
-  "container.enchant.clue": "%s"
+  "container.enchant.clue": "%s",
+
+  "enchantment.ramchants.viscosity": "Viscosity",
+  "enchantment.ramchants.dullness": "Dullness",
+  "enchantment.ramchants.arthropods_favor": "Arthropods Favor",
+  "enchantment.ramchants.wraithward": "Wraithward",
+  "enchantment.ramchants.vulnerability": "Vulnerability",
+  "enchantment.ramchants.explosive_fragility": "Explosive Fragility",
+  "enchantment.ramchants.arrows_bane": "Arrows Bane",
+  "enchantment.ramchants.burning": "Burning",
+  "enchantment.ramchants.plummet": "Plummeting",
+  "enchantment.ramchants.electric_attraction": "Electric Attraction",
+  "enchantment.ramchants.voiding": "Voiding"
 }

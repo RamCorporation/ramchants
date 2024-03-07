@@ -6,17 +6,10 @@
     "EnchantmentScreenMixin",
     "TooltipComponentMixin"
   ],
-  "mixins": [
-    "ElytraItemMixin",
-    "EnchantedBookItemMixin",
-    "EnchantmentScreenHandlerMixin",
-    "ItemMixin",
-    "ItemStackMixin",
-    "PlayerEntityMixin",
-    "RangedWeaponMixin",
-    "TridentItemMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "ItemMixin"
+  ]
 }

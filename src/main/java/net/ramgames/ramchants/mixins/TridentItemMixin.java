@@ -1,4 +1,4 @@
-package net.ramgames.ramchants.mixins.client;
+package net.ramgames.ramchants.mixins;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;

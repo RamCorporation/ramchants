@@ -1,4 +1,4 @@
-package net.ramgames.ramchants.mixins.client;
+package net.ramgames.ramchants.mixins;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -9,6 +9,7 @@ import net.minecraft.item.Items;
 import net.minecraft.screen.EnchantmentScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,6 +31,8 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
     @Shadow @Final public int[] enchantmentPower;
 
     @Shadow @Final public int[] enchantmentId;
+
+    @Shadow @Final private Random random;
 
     protected EnchantmentScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId) {
         super(type, syncId);
@@ -57,6 +60,8 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
     private List<EnchantmentLevelEntry> ramChants$getFirstCompatible(Map<Enchantment, Integer> itemEnchants, List<EnchantmentLevelEntry> possibleEnchants) {
         mainForBlock:
         for(EnchantmentLevelEntry enchantment : possibleEnchants) {
+            if(enchantment.enchantment.isCursed()) continue;
+            if(enchantment.enchantment.isTreasure()) if(this.random.nextInt(4) == 1) continue;
             for(Enchantment combinable : itemEnchants.keySet()) {
                 if (enchantment.enchantment == combinable) {
                     if(combinable.getMaxLevel() == itemEnchants.get(combinable)) continue mainForBlock;
