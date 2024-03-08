@@ -25,6 +25,9 @@ public class ModEnchantments {
     public static final Enchantment PLUMMET = register("plummet", new AntiProtectionEnchantment(UNCOMMON, ProtectionEnchantment.Type.FALL));
     public static final Enchantment ELECTRIC_ATTRACTION = register("electric_attraction", new ElectricAttractionEnchantment(VERY_RARE));
     public static final Enchantment VOIDING = register("voiding", new VoidingEnchantment());
+    public static final Enchantment AQUA_HAUL = register("aqua_haul", new AquaHaulEnchantment());
+    public static final Enchantment CRUMBLING = register("crumbling", new CrumblingEnchantment());
+    public static final Enchantment BACKLASH = register("backlash", new BacklashEnchantment());
 
     private static Enchantment register(String name, Enchantment enchantment) {
         return Registry.register(Registries.ENCHANTMENT, new Identifier(RamChants.MOD_ID, name), enchantment);

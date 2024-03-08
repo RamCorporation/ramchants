@@ -15,7 +15,7 @@
     "RangedWeaponMixin",
     "TridentEntityMixin",
     "TridentItemMixin",
-    "WorldMixin"
+    "BlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

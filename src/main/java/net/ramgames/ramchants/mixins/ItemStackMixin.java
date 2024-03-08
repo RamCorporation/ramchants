@@ -1,6 +1,5 @@
 package net.ramgames.ramchants.mixins;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -11,15 +10,15 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.ramgames.ramchants.RamChants;
+import net.ramgames.ramchants.enchantments.CrumblingEnchantment;
+import net.ramgames.ramchants.enchantments.ModEnchantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Objects;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements FabricItemStack {
@@ -55,6 +54,14 @@ public abstract class ItemStackMixin implements FabricItemStack {
         ci.cancel();
     }
 
+    @ModifyVariable(method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    public int applyCrumbling(int amount) {
+        int level = EnchantmentHelper.getLevel(ModEnchantments.CRUMBLING, (ItemStack) (Object) this);
+        if(level <= 0) return amount;
+        int originalAmount = amount;
+        for(int i = 0 ; i < originalAmount; i++) if(CrumblingEnchantment.shouldIncreaseDamage((ItemStack) (Object) this, level)) amount++;
+        return amount;
+    }
 
 
 }
