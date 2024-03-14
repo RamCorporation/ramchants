@@ -1,12 +1,15 @@
 package net.ramgames.ramchants.mixins.client;
 
 
+import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
+import net.minecraft.client.gui.screen.ingame.GrindstoneScreen;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.*;
 import net.ramgames.ramchants.RamChants;
+import net.ramgames.ramchants.RamChantsItemStackAccess;
 import net.ramgames.ramchants.items.tooltip.EnchantabilityToolTipData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,7 +30,12 @@ public abstract class ItemMixin {
 
     @Unique
     private void getEnchantabilityToolTip(ItemStack stack, CallbackInfoReturnable<Optional<TooltipData>> cir) {
-        cir.setReturnValue(Optional.of(new EnchantabilityToolTipData(stack.getItem().getEnchantability(), RamChants.totalEnchantmentsUsed(EnchantmentHelper.get(stack)), MinecraftClient.getInstance().currentScreen instanceof EnchantmentScreen)));
+        cir.setReturnValue(Optional.of(new EnchantabilityToolTipData(
+                ((RamChantsItemStackAccess)(FabricItemStack)stack).ramChants$enchantabilityWithGrinds(),
+                RamChants.totalEnchantmentsUsed(EnchantmentHelper.get(stack)),
+                MinecraftClient.getInstance().currentScreen instanceof EnchantmentScreen || MinecraftClient.getInstance().currentScreen instanceof GrindstoneScreen,
+                ((RamChantsItemStackAccess)(FabricItemStack)stack).ramChants$isSealed()
+        )));
     }
 
     @Inject(method = "getEnchantability", at = @At("RETURN"), cancellable = true)

@@ -9,11 +9,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.ramgames.ramchants.RamChantsItemStackAccess;
 import net.ramgames.ramchants.RamChants;
+import net.ramgames.ramchants.enchantments.AbstractLinkedCurseEnchantment;
 import net.ramgames.ramchants.enchantments.CrumblingEnchantment;
 import net.ramgames.ramchants.enchantments.ModEnchantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -21,17 +24,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements FabricItemStack {
+public abstract class ItemStackMixin implements FabricItemStack, RamChantsItemStackAccess {
 
     @Shadow public abstract Item getItem();
 
     @Shadow public abstract NbtList getEnchantments();
 
+    @Shadow public abstract NbtCompound getOrCreateNbt();
+
     @Inject(method = "isEnchantable", at = @At("RETURN"), cancellable = true)
     public void ramChants$isEnchantable(CallbackInfoReturnable<Boolean> cir) {
-        if(!this.getItem().isEnchantable((ItemStack) (Object) this)) cir.setReturnValue(false);
+        if(this.ramChants$isSealed()) cir.setReturnValue(false);
+        else if(!this.getItem().isEnchantable((ItemStack) (Object) this)) cir.setReturnValue(false);
         else if(this.getEnchantments().isEmpty()) cir.setReturnValue(true);
-        else cir.setReturnValue(RamChants.totalEnchantmentsUsed(EnchantmentHelper.get((ItemStack) (Object) this)) < this.getItem().getEnchantability());
+        else cir.setReturnValue(RamChants.totalEnchantmentsUsed(EnchantmentHelper.get((ItemStack) (Object) this)) < this.ramChants$enchantabilityWithGrinds());
     }
 
     @Inject(method = "addEnchantment", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtList;add(Ljava/lang/Object;)Z", shift = At.Shift.BEFORE), cancellable = true)
@@ -39,18 +45,25 @@ public abstract class ItemStackMixin implements FabricItemStack {
         ItemStack stack = (ItemStack) (Object) this;
         int subTotal = RamChants.totalEnchantmentsUsed(EnchantmentHelper.get(stack));
         int maxLevel = this.getItem().getEnchantability() - subTotal;
+        if(maxLevel == 0) { ci.cancel(); return; }
         NbtList enchants = stack.getItem() == Items.ENCHANTED_BOOK ? EnchantedBookItem.getEnchantmentNbt(stack) : this.getEnchantments();
         for(int i = 0; i < enchants.copy().size(); i++) {
             NbtCompound compound = enchants.getCompound(i);
-            if(compound.getString("id").equals(EnchantmentHelper.getEnchantmentId(enchantment).toString())) {
+            Enchantment enchantToCompare;
+            Enchantment enchantToWrite;
+            if(enchantment instanceof AbstractLinkedCurseEnchantment curse) {
+                enchantToCompare = curse.getLinkedEnchantment();
+                enchantToWrite = curse;
+            } else enchantToCompare = enchantToWrite = enchantment;
+            if(compound.getString("id").equals(EnchantmentHelper.getEnchantmentId(enchantToCompare).toString())) {
                 int proposedLevel = compound.getInt("lvl") + level;
-                enchants.set(i, EnchantmentHelper.createNbt(EnchantmentHelper.getEnchantmentId(enchantment), (byte) (Math.min(proposedLevel, maxLevel+compound.getInt("lvl")))));
+                enchants.set(i, EnchantmentHelper.createNbt(EnchantmentHelper.getEnchantmentId(enchantToWrite), (byte) (Math.min(proposedLevel, maxLevel+compound.getInt("lvl")))));
                 ci.cancel();
                 return;
             }
         }
         int newLevel = Math.min(maxLevel, level);
-        if(newLevel != 0) enchants.add(EnchantmentHelper.createNbt(EnchantmentHelper.getEnchantmentId(enchantment), (byte) newLevel));
+        enchants.add(EnchantmentHelper.createNbt(EnchantmentHelper.getEnchantmentId(enchantment), (byte) newLevel));
         ci.cancel();
     }
 
@@ -63,5 +76,36 @@ public abstract class ItemStackMixin implements FabricItemStack {
         return amount;
     }
 
+    @Unique
+    @Override
+    public boolean ramChants$isSealed() {
+        NbtCompound compound = this.getOrCreateNbt();
+        if(!compound.contains("enchantmentsSealed")) return false;
+        return compound.getBoolean("enchantmentsSealed");
+    }
 
+    @Unique
+    @Override
+    public void ramChants$setSealed(boolean bl) {
+        this.getOrCreateNbt().putBoolean("enchantmentsSealed", bl);
+    }
+
+    @Unique
+    @Override
+    public int ramChants$timesGrinded() {
+        return this.getOrCreateNbt().getInt("timesGrinded");
+    }
+
+    @Unique
+    @Override
+    public void ramChants$IncrementTimesGrinded() {
+        this.getOrCreateNbt().putInt("timesGrinded", 1 + ramChants$timesGrinded());
+        ramChants$setSealed(false);
+    }
+
+    @Unique
+    @Override
+    public int ramChants$enchantabilityWithGrinds() {
+        return this.getItem().getEnchantability() - ramChants$timesGrinded();
+    }
 }

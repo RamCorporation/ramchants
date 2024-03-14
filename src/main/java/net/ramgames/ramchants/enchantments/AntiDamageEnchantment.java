@@ -6,24 +6,13 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
 
-public class AntiDamageEnchantment extends Enchantment {
+public class AntiDamageEnchantment extends AbstractLinkedCurseEnchantment {
 
     private final int typeIndex;
 
-    protected AntiDamageEnchantment(Rarity rarity, int typeIndex) {
-        super(rarity, EnchantmentTarget.WEAPON, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+    protected AntiDamageEnchantment(Enchantment antiEnchant, Rarity rarity, int typeIndex) {
+        super(antiEnchant, rarity, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
         this.typeIndex = typeIndex;
-    }
-
-    public int getMaxLevel() {
-        return 5;
-    }
-
-
-
-    @Override
-    public int getMinPower(int level) {
-        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -38,24 +27,22 @@ public class AntiDamageEnchantment extends Enchantment {
     }
 
     @Override
-    public boolean isCursed() {
-        return true;
-    }
-
-    @Override
-    protected boolean canAccept(Enchantment other) {
-        if(other == Enchantments.PROTECTION || other == Enchantments.BLAST_PROTECTION || other == Enchantments.SMITE) return false;
-        switch(typeIndex) {
+    public boolean canAccept(Enchantment other) {
+        if(other == Enchantments.SHARPNESS || other == Enchantments.BANE_OF_ARTHROPODS || other == Enchantments.SMITE) return false;
+        return switch(typeIndex) {
             case 0 -> {
-                if (other == ModEnchantments.ARTHROPODS_FAVOR || other == ModEnchantments.WRAITHWARD) return false;
+                if (other == ModEnchantments.ARTHROPODS_FAVOR || other == ModEnchantments.WRAITHWARD) yield false;
+                yield Enchantments.SHARPNESS.canAccept(other);
             }
             case 1 -> {
-                if (other == ModEnchantments.ARTHROPODS_FAVOR || other == ModEnchantments.DULLNESS) return false;
+                if (other == ModEnchantments.ARTHROPODS_FAVOR || other == ModEnchantments.DULLNESS) yield false;
+                yield Enchantments.SMITE.canAccept(other);
             }
             case 2 -> {
-                if (other == ModEnchantments.WRAITHWARD || other == ModEnchantments.DULLNESS) return false;
+                if (other == ModEnchantments.WRAITHWARD || other == ModEnchantments.DULLNESS) yield false;
+                yield Enchantments.BANE_OF_ARTHROPODS.canAccept(other);
             }
-        }
-        return super.canAccept(other);
+            default -> throw new IllegalStateException("Unexpected type index: " + typeIndex);
+        };
     }
 }

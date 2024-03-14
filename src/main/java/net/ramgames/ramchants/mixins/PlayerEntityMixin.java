@@ -52,6 +52,8 @@ public abstract class PlayerEntityMixin extends Entity {
     @ModifyReturnValue(method = "getBlockBreakingSpeed", at = @At("RETURN"))
     private float changeBreakingSpeed(float original) {
         if(this.isSubmergedIn(FluidTags.WATER) && EnchantmentHelper.getEquipmentLevel(ModEnchantments.VISCOSITY, (PlayerEntity)(Object) this) > 0) original /= 5.0F;
+        int torpidity = EnchantmentHelper.getEquipmentLevel(ModEnchantments.TORPIDITY, ((PlayerEntity)(Object) this));
+        if(torpidity > 0) original /= (2 * torpidity);
         return original;
     }
 }
