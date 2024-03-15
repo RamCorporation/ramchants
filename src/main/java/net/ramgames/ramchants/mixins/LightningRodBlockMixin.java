@@ -7,7 +7,7 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
-import net.ramgames.ramchants.enchantments.ModEnchantments;
+import net.ramgames.ramchants.enchantments.RamChantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,7 +22,7 @@ public abstract class LightningRodBlockMixin {
     @Inject(method = "onProjectileHit", at = @At("HEAD"), cancellable = true)
     public void allowElectricAttraction(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile, CallbackInfo ci) {
         if (world.isThundering() && projectile instanceof TridentEntity && ((TridentEntity)projectile).hasChanneling()) {
-            if(EnchantmentHelper.getLevel(ModEnchantments.ELECTRIC_ATTRACTION, ((TridentEntity) projectile).getItemStack()) > 0 && projectile.getOwner() != null) {
+            if(EnchantmentHelper.getLevel(RamChantments.ELECTRIC_ATTRACTION, ((TridentEntity) projectile).getItemStack()) > 0 && projectile.getOwner() != null) {
                 if(hit.getBlockPos() == projectile.getOwner().getBlockPos()) {
                     return;
                 }

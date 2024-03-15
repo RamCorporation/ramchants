@@ -31,10 +31,10 @@ public abstract class ItemMixin {
     @Unique
     private void getEnchantabilityToolTip(ItemStack stack, CallbackInfoReturnable<Optional<TooltipData>> cir) {
         cir.setReturnValue(Optional.of(new EnchantabilityToolTipData(
-                ((RamChantsItemStackAccess)(FabricItemStack)stack).ramChants$enchantabilityWithGrinds(),
+                RamChants.getStackAccess(stack).ramChants$enchantabilityWithGrinds(),
                 RamChants.totalEnchantmentsUsed(EnchantmentHelper.get(stack)),
                 MinecraftClient.getInstance().currentScreen instanceof EnchantmentScreen || MinecraftClient.getInstance().currentScreen instanceof GrindstoneScreen,
-                ((RamChantsItemStackAccess)(FabricItemStack)stack).ramChants$isSealed()
+                RamChants.getStackAccess(stack).ramChants$isSealed()
         )));
     }
 

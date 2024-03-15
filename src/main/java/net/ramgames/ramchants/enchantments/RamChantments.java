@@ -11,7 +11,7 @@ import net.ramgames.ramchants.RamChants;
 
 import static net.minecraft.enchantment.Enchantment.Rarity.*;
 
-public class ModEnchantments {
+public class RamChantments {
 
     public static final EquipmentSlot[] ALL_ARMOR = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
@@ -28,7 +28,7 @@ public class ModEnchantments {
     public static final Enchantment VOIDING = register("voiding", new VoidingEnchantment());
     public static final Enchantment AQUA_HAUL = register("aqua_haul", new AquaHaulEnchantment());
     public static final Enchantment CRUMBLING = register("crumbling", new CrumblingEnchantment());
-    public static final Enchantment BACKLASH = register("backlash", new BacklashEnchantment());
+    public static final Enchantment PRICKING = register("pricking", new PrickingEnchantment());
     public static final Enchantment TORPIDITY = register("torpidity", new TorpidityEnchantment());
     public static final Enchantment DETERRENCE = register("deterrence", new DeterrenceEnchantment());
     public static final Enchantment SEAS_WOE = register("seas_woe", new SeasWoeEnchantment());
@@ -36,6 +36,9 @@ public class ModEnchantments {
     public static final Enchantment FLIMSY = register("flimsy", new FlimsyEnchantment());
     public static final Enchantment SLOW_DRAW = register("slow_draw", new SlowDrawEnchantment());
     public static final Enchantment INACCURACY = register("inaccuracy", new InaccuracyEnchantment());
+    public static final Enchantment DROWNING = register("drowning", new DrowningEnchantment());
+    public static final Enchantment BOILING_ARROW = register("boiling_arrow", new BoilingArrow());
+    public static final Enchantment MOLTEN_HANDLE = register("molten_handle", new MoltenHandleEnchantment());
 
     private static Enchantment register(String name, Enchantment enchantment) {
         RamChants.registerLinkedCurse((AbstractLinkedCurseEnchantment) enchantment);

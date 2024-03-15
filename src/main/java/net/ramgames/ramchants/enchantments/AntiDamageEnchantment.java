@@ -1,7 +1,6 @@
 package net.ramgames.ramchants.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
@@ -31,15 +30,15 @@ public class AntiDamageEnchantment extends AbstractLinkedCurseEnchantment {
         if(other == Enchantments.SHARPNESS || other == Enchantments.BANE_OF_ARTHROPODS || other == Enchantments.SMITE) return false;
         return switch(typeIndex) {
             case 0 -> {
-                if (other == ModEnchantments.ARTHROPODS_FAVOR || other == ModEnchantments.WRAITHWARD) yield false;
+                if (other == RamChantments.ARTHROPODS_FAVOR || other == RamChantments.WRAITHWARD) yield false;
                 yield Enchantments.SHARPNESS.canAccept(other);
             }
             case 1 -> {
-                if (other == ModEnchantments.ARTHROPODS_FAVOR || other == ModEnchantments.DULLNESS) yield false;
+                if (other == RamChantments.ARTHROPODS_FAVOR || other == RamChantments.DULLNESS) yield false;
                 yield Enchantments.SMITE.canAccept(other);
             }
             case 2 -> {
-                if (other == ModEnchantments.WRAITHWARD || other == ModEnchantments.DULLNESS) yield false;
+                if (other == RamChantments.WRAITHWARD || other == RamChantments.DULLNESS) yield false;
                 yield Enchantments.BANE_OF_ARTHROPODS.canAccept(other);
             }
             default -> throw new IllegalStateException("Unexpected type index: " + typeIndex);

@@ -13,7 +13,7 @@ import net.ramgames.ramchants.RamChantsItemStackAccess;
 import net.ramgames.ramchants.RamChants;
 import net.ramgames.ramchants.enchantments.AbstractLinkedCurseEnchantment;
 import net.ramgames.ramchants.enchantments.CrumblingEnchantment;
-import net.ramgames.ramchants.enchantments.ModEnchantments;
+import net.ramgames.ramchants.enchantments.RamChantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -69,7 +69,7 @@ public abstract class ItemStackMixin implements FabricItemStack, RamChantsItemSt
 
     @ModifyVariable(method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     public int applyCrumbling(int amount) {
-        int level = EnchantmentHelper.getLevel(ModEnchantments.CRUMBLING, (ItemStack) (Object) this);
+        int level = EnchantmentHelper.getLevel(RamChantments.CRUMBLING, (ItemStack) (Object) this);
         if(level <= 0) return amount;
         int originalAmount = amount;
         for(int i = 0 ; i < originalAmount; i++) if(CrumblingEnchantment.shouldIncreaseDamage((ItemStack) (Object) this, level)) amount++;

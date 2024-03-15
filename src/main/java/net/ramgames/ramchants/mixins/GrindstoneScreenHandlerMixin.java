@@ -24,13 +24,13 @@ public class GrindstoneScreenHandlerMixin {
 
     @ModifyArg(method = "grind", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;set(Ljava/util/Map;Lnet/minecraft/item/ItemStack;)V"))
     private Map<Enchantment, Integer> allowCurseRemoval(Map<Enchantment, Integer> enchantments, @Local(argsOnly = true) ItemStack item) {
-        return EnchantmentHelper.get(item).entrySet().stream().filter((entry) -> ((RamChantsItemStackAccess)(FabricItemStack)item).ramChants$isSealed()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return EnchantmentHelper.get(item).entrySet().stream().filter((entry) -> (RamChants.getStackAccess(item).ramChants$isSealed())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Inject(method = "grind", at = @At("RETURN"), cancellable = true)
     private void incrementTimesGrinded(ItemStack item, int damage, int amount, CallbackInfoReturnable<ItemStack> cir) {
         ItemStack stack = cir.getReturnValue();
-        ((RamChantsItemStackAccess)(FabricItemStack)stack).ramChants$IncrementTimesGrinded();
+        RamChants.getStackAccess(stack).ramChants$IncrementTimesGrinded();
         cir.setReturnValue(stack);
     }
 

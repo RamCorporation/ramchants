@@ -1,9 +1,11 @@
 package net.ramgames.ramchants;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.ItemStack;
 import net.ramgames.ramchants.enchantments.AbstractLinkedCurseEnchantment;
-import net.ramgames.ramchants.enchantments.ModEnchantments;
+import net.ramgames.ramchants.enchantments.RamChantments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +22,7 @@ public class RamChants implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Ramchants is preparing something magical!");
-        ModEnchantments.onInitialize();
+        RamChantments.onInitialize();
     }
 
     public static int totalEnchantmentsUsed(Map<Enchantment, Integer> enchantments) {
@@ -39,5 +41,9 @@ public class RamChants implements ModInitializer {
 
     public static AbstractLinkedCurseEnchantment getLinkedCurseFor(Enchantment enchantment) {
         return curseLinkMap.get(enchantment);
+    }
+
+    public static RamChantsItemStackAccess getStackAccess(ItemStack stack) {
+        return (RamChantsItemStackAccess) (FabricItemStack)stack;
     }
 }

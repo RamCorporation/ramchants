@@ -44,6 +44,8 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
     @Shadow @Final private Random random;
 
+    @Unique private boolean used = false;
+
     protected EnchantmentScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId) {
         super(type, syncId);
     }
@@ -73,8 +75,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
     @Inject(method = "method_17410", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;applyEnchantmentCosts(Lnet/minecraft/item/ItemStack;I)V", shift = At.Shift.AFTER))
     private void sealEnchantmentsMaybe(ItemStack itemStack, int id, PlayerEntity playerEntity, int j, ItemStack itemStack2, World world, BlockPos pos, CallbackInfo ci) {
         int sealChance = (int) (5 * Math.pow(2, id-1));
-        if(this.random.nextBetween(1,100) <= sealChance) ((RamChantsItemStackAccess)(FabricItemStack)itemStack).ramChants$setSealed(true);
-        RamChants.LOGGER.info("declaring sealed!");
+        if(this.random.nextBetween(1,100) <= sealChance) RamChants.getStackAccess(itemStack).ramChants$setSealed(true);
     }
 
     @Unique
@@ -97,16 +98,11 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
     @Inject(method = "onContentChanged", at = @At("TAIL"))
     private void setPowerLevelAndMaybeSeal(Inventory inventory, CallbackInfo ci) {
-        boolean alteredAvailability = false;
         for(int i = 0; i < this.enchantmentPower.length; i++) {
-            if (this.enchantmentPower[i] > 0 && this.enchantmentId[i] == -1) {
-                this.enchantmentPower[i] = 0;
-                alteredAvailability = true;
-            }
+            if (this.enchantmentPower[i] > 0 && this.enchantmentId[i] == -1) this.enchantmentPower[i] = 0;
         }
-        if(alteredAvailability && Arrays.equals(this.enchantmentPower, new int[]{0,0,0}) && inventory.getStack(0).getItem() != Items.AIR) {
-            RamChants.LOGGER.info("no options, effectively sealed!");
-            ((RamChantsItemStackAccess) (FabricItemStack) inventory.getStack(0)).ramChants$setSealed(true);
+        if(used && Arrays.equals(this.enchantmentPower, new int[]{0,0,0}) && inventory.getStack(0).getItem() != Items.AIR) {
+            RamChants.getStackAccess(inventory.getStack(0)).ramChants$setSealed(true);
         }
     }
 
@@ -115,5 +111,10 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
         if(!RamChants.hasLinkedCurseFor(enchantment)) return enchantment;
         if(this.random.nextBetween(1, level+1) != 1) return enchantment;
         return RamChants.getLinkedCurseFor(enchantment);
+    }
+
+    @Inject(method = "onButtonClick", at = @At("HEAD"))
+    private void determineUsed(PlayerEntity player, int id, CallbackInfoReturnable<Boolean> cir) {
+        used = true;
     }
 }

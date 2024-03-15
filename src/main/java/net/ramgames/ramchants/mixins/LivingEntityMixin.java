@@ -1,20 +1,27 @@
 package net.ramgames.ramchants.mixins;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.ramgames.ramchants.enchantments.ModEnchantments;
+import net.ramgames.ramchants.RamChants;
+import net.ramgames.ramchants.enchantments.RamChantments;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Debug(export = true)
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable {
+
+    @Shadow private BlockPos lastBlockPos;
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -34,17 +41,25 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
             )
     )
     public float applyAquaHaulToGVariable(float par1) {
-        int i = EnchantmentHelper.getEquipmentLevel(ModEnchantments.AQUA_HAUL, (LivingEntity) (Object) this);
+        int i = EnchantmentHelper.getEquipmentLevel(RamChantments.AQUA_HAUL, (LivingEntity) (Object) this);
         if(i <= 0) return par1;
         return par1 / (i + 1);
     }
 
     @ModifyArgs(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;multiply(DDD)Lnet/minecraft/util/math/Vec3d;"))
     public void applyAquaHaulToFVariable(Args args) {
-        double i = EnchantmentHelper.getEquipmentLevel(ModEnchantments.AQUA_HAUL, (LivingEntity) (Object) this);
+        double i = EnchantmentHelper.getEquipmentLevel(RamChantments.AQUA_HAUL, (LivingEntity) (Object) this);
         if(i <= 0) return;
         i /= 12;
         args.set(0, ((double) args.get(0)) / (i + 1));
         args.set(2, ((double) args.get(0)) / (i + 1));
+    }
+
+    @ModifyReturnValue(method = "getNextAirUnderwater", at = @At("RETURN"))
+    public int applyDrowning(int original) {
+        int level = EnchantmentHelper.getEquipmentLevel(RamChantments.DROWNING, (LivingEntity)(Object)this);
+        if(level <= 0) return original;
+        if(this.random.nextInt(level + 1) > 0 && original != 0) original -= 1;
+        return original;
     }
 }

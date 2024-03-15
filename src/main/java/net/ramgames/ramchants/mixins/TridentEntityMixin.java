@@ -9,7 +9,7 @@ import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.ramgames.ramchants.enchantments.ModEnchantments;
+import net.ramgames.ramchants.enchantments.RamChantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -22,12 +22,12 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity {
 
     @ModifyReturnValue(method = "hasChanneling", at = @At(value = "RETURN"))
     public boolean allowElectricAttractionToSpawnLightning(boolean original) {
-        return EnchantmentHelper.getLevel(ModEnchantments.ELECTRIC_ATTRACTION, this.getItemStack()) > 0 || original;
+        return EnchantmentHelper.getLevel(RamChantments.ELECTRIC_ATTRACTION, this.getItemStack()) > 0 || original;
     }
 
     @ModifyExpressionValue(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getBlockPos()Lnet/minecraft/util/math/BlockPos;"))
     public BlockPos setLightningSpawnLocation(BlockPos original) {
-        if(EnchantmentHelper.getLevel(ModEnchantments.ELECTRIC_ATTRACTION, this.getItemStack()) > 0 && this.getOwner() != null) return this.getOwner().getBlockPos();
+        if(EnchantmentHelper.getLevel(RamChantments.ELECTRIC_ATTRACTION, this.getItemStack()) > 0 && this.getOwner() != null) return this.getOwner().getBlockPos();
         return original;
     }
 

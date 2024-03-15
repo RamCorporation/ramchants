@@ -10,13 +10,13 @@ public abstract class AbstractLinkedCurseEnchantment extends Enchantment {
 
     private final Enchantment linkedEnchantment;
 
-    protected AbstractLinkedCurseEnchantment(Enchantment enchantment, Rarity rarity, EquipmentSlot[] slotTypes) {
-        super(rarity, enchantment.target, slotTypes);
+    protected AbstractLinkedCurseEnchantment(Enchantment enchantment, EquipmentSlot[] slotTypes) {
+        super(enchantment.getRarity(), enchantment.target, slotTypes);
         this.linkedEnchantment = enchantment;
     }
 
-    protected AbstractLinkedCurseEnchantment(Enchantment enchantment, EquipmentSlot[] slotTypes) {
-        super(enchantment.getRarity(), enchantment.target, slotTypes);
+    protected AbstractLinkedCurseEnchantment(Enchantment enchantment, Rarity rarity, EquipmentSlot[] slotTypes) {
+        super(rarity, enchantment.target, slotTypes);
         this.linkedEnchantment = enchantment;
     }
 
