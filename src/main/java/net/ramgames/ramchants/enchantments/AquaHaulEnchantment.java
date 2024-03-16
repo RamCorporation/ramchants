@@ -1,13 +1,11 @@
 package net.ramgames.ramchants.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EquipmentSlot;
 
 public class AquaHaulEnchantment extends AbstractLinkedCurseEnchantment {
     protected AquaHaulEnchantment() {
-        super(Enchantments.DEPTH_STRIDER, new EquipmentSlot[]{EquipmentSlot.FEET});
+        super(Enchantments.DEPTH_STRIDER, RamChantments.FEET);
     }
 
     @Override

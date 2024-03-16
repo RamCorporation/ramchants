@@ -2,8 +2,8 @@ package net.ramgames.ramchants.mixins;
 
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.TridentItem;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(ElytraItem.class)
 public abstract class ElytraItemMixin extends Item {
@@ -12,7 +12,7 @@ public abstract class ElytraItemMixin extends Item {
         super(settings);
     }
 
-    @Override
+    @Unique
     public int getEnchantability() {
         return 5;
     }

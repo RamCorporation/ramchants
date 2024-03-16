@@ -1,6 +1,7 @@
 package net.ramgames.ramchants.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -9,6 +10,9 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.ramgames.ramchants.enchantments.RamChantments;
@@ -42,7 +46,7 @@ public abstract class PlayerEntityMixin extends Entity {
     private Vec3d lastVec3d;
 
     @Inject(method = "applyEnchantmentCosts", at = @At("HEAD"), cancellable = true)
-    public void adjustEnchantXPCost(ItemStack enchantedItem, int experienceLevels, CallbackInfo ci) {
+    private void adjustEnchantXPCost(ItemStack enchantedItem, int experienceLevels, CallbackInfo ci) {
         this.addExperience(-(5 + 2 * experienceLevels));
         if (this.experienceLevel < 0) {
             this.experienceLevel = 0;
@@ -76,5 +80,23 @@ public abstract class PlayerEntityMixin extends Entity {
         int level = EnchantmentHelper.getEquipmentLevel(RamChantments.PRICKING, (LivingEntity) (Object)this);
         if(level <= 0) return;
         if(this.random.nextBetween(1, (int)(100000/(Math.pow(10, level)))) == 1) damage(this.getDamageSources().thorns((LivingEntity)(Object)this), 2);
+    }
+
+    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I"))
+    private void applyRepulsion(Entity target, CallbackInfo ci, @Local(name = "bl") boolean bl) {
+        int level = EnchantmentHelper.getEquipmentLevel(RamChantments.REPULSION, (PlayerEntity)(Object)this);
+        if(level <= 0) return;
+        if (this.isSprinting() && bl) ++level;
+        if(target instanceof LivingEntity) ((PlayerEntity)(Object)this).takeKnockback(level * 0.25, MathHelper.sin((this.getYaw()+180) * 0.017453292F), -MathHelper.cos((this.getYaw()+180) * 0.017453292F));
+    }
+
+    @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
+    private void cancelAttackForWhimsyBlade(Entity target, CallbackInfo ci) {
+        int level = EnchantmentHelper.getEquipmentLevel(RamChantments.WHIMSY_BLADE, (PlayerEntity)(Object)this);
+        if(level <= 0) return;
+        if(this.random.nextBetween(1, 100) <= 10 + 15 * (level-1)) {
+            getWorld().playSound(null, getX(), getY(), getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, SoundCategory.PLAYERS, 1, 1);
+            ci.cancel();
+        }
     }
 }

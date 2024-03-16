@@ -3,7 +3,6 @@ package net.ramgames.ramchants.enchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 
 public abstract class AbstractLinkedCurseEnchantment extends Enchantment {
@@ -17,6 +16,11 @@ public abstract class AbstractLinkedCurseEnchantment extends Enchantment {
 
     protected AbstractLinkedCurseEnchantment(Enchantment enchantment, Rarity rarity, EquipmentSlot[] slotTypes) {
         super(rarity, enchantment.target, slotTypes);
+        this.linkedEnchantment = enchantment;
+    }
+
+    protected AbstractLinkedCurseEnchantment(Enchantment enchantment, EnchantmentTarget target, EquipmentSlot[] slotTypes) {
+        super(enchantment.getRarity(), target, slotTypes);
         this.linkedEnchantment = enchantment;
     }
 
