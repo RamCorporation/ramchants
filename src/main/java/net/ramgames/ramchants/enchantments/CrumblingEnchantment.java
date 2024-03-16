@@ -1,16 +1,13 @@
 package net.ramgames.ramchants.enchantments;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.random.Random;
 
 public class CrumblingEnchantment extends AbstractLinkedCurseEnchantment {
     protected CrumblingEnchantment() {
-        super(Enchantments.UNBREAKING, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+        super(Enchantments.UNBREAKING, RamChantments.MAIN_HAND);
     }
 
     public static boolean shouldIncreaseDamage(ItemStack item, int level) {

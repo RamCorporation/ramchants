@@ -12,10 +12,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.ramgames.ramchants.RamChants;
 import net.ramgames.ramchants.enchantments.RamChantments;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Debug(export = true)
 @Mixin(BowItem.class)
 public abstract class BowItemMixin {
 
@@ -59,5 +58,12 @@ public abstract class BowItemMixin {
     @Inject(method = "onStoppedUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V", shift = At.Shift.BEFORE))
     private void applyBoilingArrow(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo ci) {
         if(EnchantmentHelper.getLevel(RamChantments.BOILING_ARROW, stack) > 0) user.setOnFireFor(5);
+    }
+
+    @Inject(method = "onStoppedUsing", at = @At(value = "TAIL"))
+    private void applyRecoil(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo ci) {
+        int level = EnchantmentHelper.getLevel(RamChantments.RECOIL, stack);
+        RamChants.LOGGER.info("level: "+level);
+        if(level > 0) user.takeKnockback(level*0.25, MathHelper.sin((user.getYaw()+180) * 0.017453292F), -MathHelper.cos((user.getYaw()+180) * 0.017453292F));
     }
 }

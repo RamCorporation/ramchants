@@ -33,15 +33,16 @@ public abstract class ItemStackMixin implements FabricItemStack, RamChantsItemSt
     @Shadow public abstract NbtCompound getOrCreateNbt();
 
     @Inject(method = "isEnchantable", at = @At("RETURN"), cancellable = true)
-    public void ramChants$isEnchantable(CallbackInfoReturnable<Boolean> cir) {
+    private void ramChants$isEnchantable(CallbackInfoReturnable<Boolean> cir) {
         if(this.ramChants$isSealed()) cir.setReturnValue(false);
         else if(!this.getItem().isEnchantable((ItemStack) (Object) this)) cir.setReturnValue(false);
         else if(this.getEnchantments().isEmpty()) cir.setReturnValue(true);
         else cir.setReturnValue(RamChants.totalEnchantmentsUsed(EnchantmentHelper.get((ItemStack) (Object) this)) < this.ramChants$enchantabilityWithGrinds());
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Inject(method = "addEnchantment", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtList;add(Ljava/lang/Object;)Z", shift = At.Shift.BEFORE), cancellable = true)
-    public void ramChants$addEnchantment(Enchantment enchantment, int level, CallbackInfo ci) {
+    private void ramChants$addEnchantment(Enchantment enchantment, int level, CallbackInfo ci) {
         ItemStack stack = (ItemStack) (Object) this;
         int subTotal = RamChants.totalEnchantmentsUsed(EnchantmentHelper.get(stack));
         int maxLevel = this.getItem().getEnchantability() - subTotal;
@@ -68,7 +69,7 @@ public abstract class ItemStackMixin implements FabricItemStack, RamChantsItemSt
     }
 
     @ModifyVariable(method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-    public int applyCrumbling(int amount) {
+    private int applyCrumbling(int amount) {
         int level = EnchantmentHelper.getLevel(RamChantments.CRUMBLING, (ItemStack) (Object) this);
         if(level <= 0) return amount;
         int originalAmount = amount;

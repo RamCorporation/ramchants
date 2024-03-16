@@ -3,14 +3,13 @@ package net.ramgames.ramchants.enchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityGroup;
-import net.minecraft.entity.EquipmentSlot;
 
 public class AntiDamageEnchantment extends AbstractLinkedCurseEnchantment {
 
     private final int typeIndex;
 
     protected AntiDamageEnchantment(Enchantment antiEnchant, Rarity rarity, int typeIndex) {
-        super(antiEnchant, rarity, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+        super(antiEnchant, rarity, RamChantments.MAIN_HAND);
         this.typeIndex = typeIndex;
     }
 

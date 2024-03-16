@@ -1,14 +1,9 @@
 package net.ramgames.ramchants.mixins;
 
 import net.minecraft.entity.projectile.FishingBobberEntity;
-import net.minecraft.util.math.BlockPos;
-import net.ramgames.ramchants.RamChants;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FishingBobberEntity.class)
 public abstract class FishingBobberEntityMixin {
