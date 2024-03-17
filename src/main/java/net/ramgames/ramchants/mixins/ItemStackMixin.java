@@ -9,17 +9,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.ramgames.ramchants.RamChantsItemStackAccess;
 import net.ramgames.ramchants.RamChants;
+import net.ramgames.ramchants.RamChantsItemStackAccess;
 import net.ramgames.ramchants.enchantments.AbstractLinkedCurseEnchantment;
 import net.ramgames.ramchants.enchantments.CrumblingEnchantment;
 import net.ramgames.ramchants.enchantments.RamChantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -66,6 +64,12 @@ public abstract class ItemStackMixin implements FabricItemStack, RamChantsItemSt
         int newLevel = Math.min(maxLevel, level);
         enchants.add(EnchantmentHelper.createNbt(EnchantmentHelper.getEnchantmentId(enchantment), (byte) newLevel));
         ci.cancel();
+    }
+
+    @ModifyConstant(method = "addEnchantment", constant = @Constant(stringValue = "Enchantments"))
+    private String allowEnchantedBookEnchanting(String constant) {
+        if(this.getItem() != Items.ENCHANTED_BOOK) return constant;
+        return "StoredEnchantments";
     }
 
     @ModifyVariable(method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z", at = @At("HEAD"), ordinal = 0, argsOnly = true)

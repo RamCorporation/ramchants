@@ -11,6 +11,7 @@ import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.ramgames.ramchants.RamChantsPersistentProjectileEntityAccess;
 import net.ramgames.ramchants.enchantments.RamChantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -49,8 +50,10 @@ public abstract class CrossBowItemMixin {
     }
 
     @ModifyArg(method = "shoot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnEntity(Lnet/minecraft/entity/Entity;)Z"))
-    private static Entity allowArrowPickup(Entity par1, @Local(argsOnly = true, ordinal = 0) ItemStack crossbow) {
+    private static Entity allowArrowPickupAndDeflection(Entity par1, @Local(argsOnly = true, ordinal = 0) ItemStack crossbow, @Local(argsOnly = true) World world) {
         if(EnchantmentHelper.getLevel(RamChantments.INACCURACY, crossbow) > 0 && par1 instanceof PersistentProjectileEntity projectile) projectile.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
+        int deflection = EnchantmentHelper.getLevel(RamChantments.DEFLECTION, crossbow);
+        if(deflection > 0 && world.getRandom().nextBetween(1,100) <= 20 * deflection && par1 instanceof PersistentProjectileEntity projectile) ((RamChantsPersistentProjectileEntityAccess)projectile).RamChants$setShouldDeflect();
         return par1;
     }
 }

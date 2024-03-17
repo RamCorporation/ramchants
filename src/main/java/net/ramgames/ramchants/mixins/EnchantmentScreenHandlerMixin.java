@@ -2,7 +2,6 @@ package net.ramgames.ramchants.mixins;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,7 +14,7 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import net.ramgames.ramchants.RamChants;
+import net.ramgames.ramchants.RamChantUtils;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,7 +30,6 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Mixin(EnchantmentScreenHandler.class)
 public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
@@ -61,36 +59,18 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
     @Inject(method = "generateEnchantments", at = @At("RETURN"), cancellable = true)
     private void fixEnchants(ItemStack stack, int slot, int level, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
-        cir.setReturnValue(ramChants$getFirstCompatible(EnchantmentHelper.get(stack), cir.getReturnValue()));
+        cir.setReturnValue(RamChantUtils.getFirstCompatible(this.random, EnchantmentHelper.get(stack), cir.getReturnValue()));
     }
     @Inject(method = "method_17410", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;applyEnchantmentCosts(Lnet/minecraft/item/ItemStack;I)V", shift = At.Shift.AFTER))
     private void applyCurseMaybe(ItemStack itemStack, int id, PlayerEntity playerEntity, int j, ItemStack itemStack2, World world, BlockPos pos, CallbackInfo ci, @Local LocalRef<List<EnchantmentLevelEntry>> list) {
         EnchantmentLevelEntry entry = list.get().get(0);
-        EnchantmentLevelEntry newEntry = new EnchantmentLevelEntry(ramChants$determineIfApplyCurse(entry.enchantment, enchantmentPower[id]), entry.level);
+        EnchantmentLevelEntry newEntry = new EnchantmentLevelEntry(RamChantUtils.determineIfApplyCurse(this.random, entry.enchantment, enchantmentPower[id]), entry.level);
         list.set(List.of(newEntry));
     }
     @Inject(method = "method_17410", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;applyEnchantmentCosts(Lnet/minecraft/item/ItemStack;I)V", shift = At.Shift.AFTER))
     private void sealEnchantmentsMaybe(ItemStack itemStack, int id, PlayerEntity playerEntity, int j, ItemStack itemStack2, World world, BlockPos pos, CallbackInfo ci) {
         int sealChance = (int) (5 * Math.pow(2, id-1));
-        if(this.random.nextBetween(1,100) <= sealChance) RamChants.getStackAccess(itemStack).ramChants$setSealed(true);
-    }
-
-    @Unique
-    private List<EnchantmentLevelEntry> ramChants$getFirstCompatible(Map<Enchantment, Integer> itemEnchants, List<EnchantmentLevelEntry> possibleEnchants) {
-        mainForBlock:
-        for(EnchantmentLevelEntry enchantment : possibleEnchants) {
-            if(enchantment.enchantment.isCursed()) continue;
-            if(enchantment.enchantment.isTreasure()) if(this.random.nextInt(4) == 1) continue;
-            for(Enchantment combinable : itemEnchants.keySet()) {
-                if (enchantment.enchantment == combinable) {
-                    if(combinable.getMaxLevel() == itemEnchants.get(combinable)) continue mainForBlock;
-                    else continue;
-                }
-                if (!enchantment.enchantment.canCombine(combinable)) continue mainForBlock;
-            }
-            return List.of(new EnchantmentLevelEntry(enchantment.enchantment, 1));
-        }
-        return List.of();
+        if(this.random.nextBetween(1,100) <= sealChance) RamChantUtils.getStackAccess(itemStack).ramChants$setSealed(true);
     }
 
     @Inject(method = "onContentChanged", at = @At("TAIL"))
@@ -99,15 +79,8 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             if (this.enchantmentPower[i] > 0 && this.enchantmentId[i] == -1) this.enchantmentPower[i] = 0;
         }
         if(used && Arrays.equals(this.enchantmentPower, new int[]{0,0,0}) && inventory.getStack(0).getItem() != Items.AIR) {
-            RamChants.getStackAccess(inventory.getStack(0)).ramChants$setSealed(true);
+            RamChantUtils.getStackAccess(inventory.getStack(0)).ramChants$setSealed(true);
         }
-    }
-
-    @Unique
-    private Enchantment ramChants$determineIfApplyCurse(Enchantment enchantment, int level) {
-        if(!RamChants.hasLinkedCurseFor(enchantment)) return enchantment;
-        if(this.random.nextBetween(1, level+1) != 1) return enchantment;
-        return RamChants.getLinkedCurseFor(enchantment);
     }
 
     @Inject(method = "onButtonClick", at = @At("HEAD"))

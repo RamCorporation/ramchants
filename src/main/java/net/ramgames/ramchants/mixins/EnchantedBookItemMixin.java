@@ -8,7 +8,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.ramgames.ramchants.RamChants;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(EnchantedBookItem.class)
@@ -17,10 +16,6 @@ public abstract class EnchantedBookItemMixin extends Item {
         super(settings);
     }
 
-    @Unique
-    public int getEnchantability() {
-        return 5;
-    }
     @ModifyReturnValue(method = "isEnchantable", at = @At("RETURN"))
     private boolean changeIsEnchantable(boolean original, @Local(argsOnly = true) ItemStack stack) {
         if(stack.getNbt() == null) return true;

@@ -1,6 +1,5 @@
 package net.ramgames.ramchants.mixins.client;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.text.MutableText;

@@ -3,9 +3,9 @@
   "package": "net.ramgames.ramchants.mixins.client",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "ClientItemMixin",
     "EnchantmentScreenMixin",
-    "TooltipComponentMixin",
-    "ItemMixin"
+    "TooltipComponentMixin"
   ],
   "injectors": {
     "defaultRequire": 1

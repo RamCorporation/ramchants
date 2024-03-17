@@ -1,15 +1,16 @@
 package net.ramgames.ramchants.mixins.client;
 
 
-import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
 import net.minecraft.client.gui.screen.ingame.GrindstoneScreen;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.ramgames.ramchants.RamChantUtils;
 import net.ramgames.ramchants.RamChants;
-import net.ramgames.ramchants.RamChantsItemStackAccess;
 import net.ramgames.ramchants.items.tooltip.EnchantabilityToolTipData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -20,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(Item.class)
-public abstract class ItemMixin {
+public abstract class ClientItemMixin {
 
 
     @Inject(method = "getTooltipData", at = @At("HEAD"), cancellable = true)
@@ -31,23 +32,10 @@ public abstract class ItemMixin {
     @Unique
     private void getEnchantabilityToolTip(ItemStack stack, CallbackInfoReturnable<Optional<TooltipData>> cir) {
         cir.setReturnValue(Optional.of(new EnchantabilityToolTipData(
-                RamChants.getStackAccess(stack).ramChants$enchantabilityWithGrinds(),
+                RamChantUtils.getStackAccess(stack).ramChants$enchantabilityWithGrinds(),
                 RamChants.totalEnchantmentsUsed(EnchantmentHelper.get(stack)),
                 MinecraftClient.getInstance().currentScreen instanceof EnchantmentScreen || MinecraftClient.getInstance().currentScreen instanceof GrindstoneScreen,
-                RamChants.getStackAccess(stack).ramChants$isSealed()
+                RamChantUtils.getStackAccess(stack).ramChants$isSealed()
         )));
-    }
-
-    @Inject(method = "getEnchantability", at = @At("RETURN"), cancellable = true)
-    public void getEnchantability(CallbackInfoReturnable<Integer> cir) {
-        Item item = (Item) (Object) this;
-        if(item instanceof EnchantedBookItem ||
-            item instanceof ShieldItem ||
-            item instanceof BookItem ||
-            item instanceof BrushItem ||
-            item instanceof ShearsItem ||
-            item instanceof FlintAndSteelItem) cir.setReturnValue(5);
-        else if(item instanceof RangedWeaponItem ||
-            item instanceof TridentItem) cir.setReturnValue(8);
     }
 }

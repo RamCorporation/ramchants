@@ -5,13 +5,13 @@ import net.minecraft.enchantment.Enchantments;
 
 import java.util.Set;
 
-public class AquaHaulEnchantment extends AbstractLinkedCurseEnchantment {
-    protected AquaHaulEnchantment() {
-        super(Enchantments.DEPTH_STRIDER, RamChantments.FEET);
+public class DeflectionEnchantment extends AbstractLinkedCurseEnchantment {
+    protected DeflectionEnchantment() {
+        super(Enchantments.PIERCING, RamChantments.MAIN_HAND);
     }
 
     @Override
     public Set<Enchantment> cannotCombine() {
-        return Set.of(Enchantments.FROST_WALKER);
+        return Set.of(RamChantments.INACCURACY);
     }
 }

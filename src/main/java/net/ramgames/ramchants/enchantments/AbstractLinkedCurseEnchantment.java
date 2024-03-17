@@ -5,6 +5,9 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 
+import java.util.Collections;
+import java.util.Set;
+
 public abstract class AbstractLinkedCurseEnchantment extends Enchantment {
 
     private final Enchantment linkedEnchantment;
@@ -30,6 +33,10 @@ public abstract class AbstractLinkedCurseEnchantment extends Enchantment {
 
     @Override
     public boolean canAccept(Enchantment other) {
+        for(Enchantment curse : cannotCombine()) {
+            if (other == curse) return false;
+            if((curse instanceof AbstractLinkedCurseEnchantment curseEnchantment) && curseEnchantment.linkedEnchantment == other) return false;
+        }
         if(EnchantmentHelper.getEnchantmentId(other) == EnchantmentHelper.getEnchantmentId(linkedEnchantment)) return false;
         return linkedEnchantment.canAccept(other);
     }
@@ -47,5 +54,9 @@ public abstract class AbstractLinkedCurseEnchantment extends Enchantment {
     @Override
     public boolean isCursed() {
         return true;
+    }
+
+    public Set<Enchantment> cannotCombine() {
+        return Collections.emptySet();
     }
 }

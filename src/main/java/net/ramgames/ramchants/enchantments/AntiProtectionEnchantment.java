@@ -25,7 +25,7 @@ public class AntiProtectionEnchantment extends AbstractLinkedCurseEnchantment {
 
     @Override
     public boolean canAccept(Enchantment other) {
-        if(getLinkedEnchantment() != FEATHER_FALLING) if(other == FIRE_PROTECTION || other == PROTECTION || other == PROJECTILE_PROTECTION || other == BLAST_PROTECTION) return false;
+        if(getLinkedEnchantment() != FEATHER_FALLING) if(Set.of(PROTECTION,BLAST_PROTECTION,FIRE_PROTECTION,PROJECTILE_PROTECTION).contains(other)) return false;
         return switch (protectionType) {
             case ALL -> {
                 if(Set.of(BURNING, EXPLOSIVE_FRAGILITY, ARROWS_BANE).contains(other)) yield false;

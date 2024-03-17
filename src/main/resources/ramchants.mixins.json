@@ -8,19 +8,21 @@
     "BowItemMixin",
     "CrossBowItemMixin",
     "DamageUtilMixin",
-    "ElytraItemMixin",
     "EnchantedBookItemMixin",
     "EnchantmentScreenHandlerMixin",
+    "EnchantRandomlyLootFunctionMixin",
+    "EnchantWithLevelsLootFunctionMixin",
     "FishingBobberEntityMixin",
     "FishingRodItemMixin",
     "GrindstoneScreenHandlerMixin",
+    "ItemMixinArray",
     "ItemStackMixin",
     "LightningRodBlockMixin",
     "LivingEntityMixin",
+    "PersistentProjectileEntityMixin",
     "PlayerEntityMixin",
-    "RangedWeaponMixin",
-    "TridentEntityMixin",
-    "TridentItemMixin"
+    "ProjectileEntityMixin",
+    "TridentEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

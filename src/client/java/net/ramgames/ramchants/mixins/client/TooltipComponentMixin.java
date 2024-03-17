@@ -5,7 +5,6 @@ import net.minecraft.client.item.TooltipData;
 import net.ramgames.ramchants.items.tooltip.EnchantabilityToolTipComponent;
 import net.ramgames.ramchants.items.tooltip.EnchantabilityToolTipData;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;

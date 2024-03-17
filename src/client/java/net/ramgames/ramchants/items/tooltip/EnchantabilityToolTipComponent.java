@@ -3,7 +3,6 @@ package net.ramgames.ramchants.items.tooltip;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.joml.Matrix4f;

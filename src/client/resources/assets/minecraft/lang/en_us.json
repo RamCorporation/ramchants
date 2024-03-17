@@ -3,7 +3,7 @@
 
   "enchantment.ramchants.viscosity": "Viscosity",
   "enchantment.ramchants.dullness": "Dullness",
-  "enchantment.ramchants.arthropods_favor": "Arthropods Favor",
+  "enchantment.ramchants.arthropods_favor": "Arthropods' Favor",
   "enchantment.ramchants.wraithward": "Wraithward",
   "enchantment.ramchants.vulnerability": "Vulnerability",
   "enchantment.ramchants.explosive_fragility": "Explosive Fragility",
@@ -18,7 +18,7 @@
   "enchantment.ramchants.torpidity": "Torpidity",
   "enchantment.ramchants.flimsy": "Flimsy",
   "enchantment.ramchants.deterrence": "Deterrence",
-  "enchantment.ramchants.seas_woe": "Seas Woe",
+  "enchantment.ramchants.seas_woe": "Sea's Woe",
   "enchantment.ramchants.ghost_quiver": "Ghost Quiver",
   "enchantment.ramchants.slow_draw": "Slow Draw",
   "enchantment.ramchants.inaccuracy": "Inaccuracy",
@@ -31,6 +31,9 @@
   "enchantment.ramchants.whimsy_blade": "Whimsy Blade",
   "enchantment.ramchants.scarcity": "Scarcity",
   "enchantment.ramchants.destitution": "Destitution",
+  "enchantment.ramchants.stagnation": "Stagnation",
+  "enchantment.ramchants.deflection": "Deflection",
+  "enchantment.ramchants.betrayal": "Betrayal",
 
   "enchantment.minecraft.binding_curse": "Binding",
   "enchantment.minecraft.vanishing_curse": "Vanishing"

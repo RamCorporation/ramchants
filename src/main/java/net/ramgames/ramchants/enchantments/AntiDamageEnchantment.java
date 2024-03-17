@@ -4,6 +4,8 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityGroup;
 
+import java.util.Set;
+
 public class AntiDamageEnchantment extends AbstractLinkedCurseEnchantment {
 
     private final int typeIndex;
@@ -26,7 +28,6 @@ public class AntiDamageEnchantment extends AbstractLinkedCurseEnchantment {
 
     @Override
     public boolean canAccept(Enchantment other) {
-        if(other == Enchantments.SHARPNESS || other == Enchantments.BANE_OF_ARTHROPODS || other == Enchantments.SMITE) return false;
         return switch(typeIndex) {
             case 0 -> {
                 if (other == RamChantments.ARTHROPODS_FAVOR || other == RamChantments.WRAITHWARD) yield false;
@@ -42,5 +43,10 @@ public class AntiDamageEnchantment extends AbstractLinkedCurseEnchantment {
             }
             default -> throw new IllegalStateException("Unexpected type index: " + typeIndex);
         };
+    }
+
+    @Override
+    public Set<Enchantment> cannotCombine() {
+        return Set.of(Enchantments.SHARPNESS, Enchantments.BANE_OF_ARTHROPODS, Enchantments.SMITE);
     }
 }
