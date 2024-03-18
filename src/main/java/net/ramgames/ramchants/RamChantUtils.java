@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.util.math.random.Random;
+import net.ramgames.ramchants.api.Resources;
 
 import java.util.List;
 import java.util.Map;
@@ -36,9 +37,9 @@ public interface RamChantUtils {
     }
 
     static Enchantment determineIfApplyCurse(Random random, Enchantment enchantment, int level) {
-        if(!RamChants.hasLinkedCurseFor(enchantment)) return enchantment;
+        if(!Resources.LINKED_CURSES.contains(EnchantmentHelper.getEnchantmentId(enchantment))) return enchantment;
         if(random.nextBetween(1, level+1) != 1) return enchantment;
-        return RamChants.getLinkedCurseFor(enchantment);
+        return Resources.LINKED_CURSES.query(EnchantmentHelper.getEnchantmentId(enchantment));
     }
 
     static ItemStack applyEnchantsToLootFunctionResult(int level, ItemStack stack, LootContext context) {

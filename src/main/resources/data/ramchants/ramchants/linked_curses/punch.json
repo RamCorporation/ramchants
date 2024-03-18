@@ -1,0 +1,5 @@
+{
+  "replace": false,
+  "enchantment": "minecraft:punch",
+  "linkedCurse": "ramchants:recoil"
+}

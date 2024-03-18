@@ -1,0 +1,5 @@
+{
+  "replace": false,
+  "enchantment": "minecraft:loyalty",
+  "linkedCurse": "ramchants:betrayal"
+}

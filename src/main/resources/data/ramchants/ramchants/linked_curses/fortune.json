@@ -1,0 +1,5 @@
+{
+  "replace": false,
+  "enchantment": "minecraft:fortune",
+  "linkedCurse": "ramchants:destitution"
+}

@@ -1,0 +1,5 @@
+{
+  "replace": false,
+  "enchantment": "minecraft:flame",
+  "linkedCurse": "ramchants:boiling_arrow"
+}

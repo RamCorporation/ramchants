@@ -34,7 +34,7 @@ public abstract class ClientItemMixin {
         cir.setReturnValue(Optional.of(new EnchantabilityToolTipData(
                 RamChantUtils.getStackAccess(stack).ramChants$enchantabilityWithGrinds(),
                 RamChants.totalEnchantmentsUsed(EnchantmentHelper.get(stack)),
-                MinecraftClient.getInstance().currentScreen instanceof EnchantmentScreen || MinecraftClient.getInstance().currentScreen instanceof GrindstoneScreen,
+                MinecraftClient.getInstance().options.advancedItemTooltips || MinecraftClient.getInstance().currentScreen instanceof EnchantmentScreen || MinecraftClient.getInstance().currentScreen instanceof GrindstoneScreen,
                 RamChantUtils.getStackAccess(stack).ramChants$isSealed()
         )));
     }

@@ -1,0 +1,5 @@
+{
+  "replace": false,
+  "enchantment": "minecraft:respiration",
+  "linkedCurse": "ramchants:drowning"
+}

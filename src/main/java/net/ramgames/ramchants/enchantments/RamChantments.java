@@ -63,40 +63,5 @@ public class RamChantments {
 
     public static void onInitialize() {
         RamChants.LOGGER.info("registering curses");
-        RamChants.registerLinkedCurse(
-                (AbstractLinkedCurseEnchantment) VISCOSITY,
-                (AbstractLinkedCurseEnchantment) ARTHROPODS_FAVOR,
-                (AbstractLinkedCurseEnchantment) DULLNESS,
-                (AbstractLinkedCurseEnchantment) WRAITHWARD,
-                (AbstractLinkedCurseEnchantment) VULNERABILITY,
-                (AbstractLinkedCurseEnchantment) EXPLOSIVE_FRAGILITY,
-                (AbstractLinkedCurseEnchantment) ARROWS_BANE,
-                (AbstractLinkedCurseEnchantment) BURNING,
-                (AbstractLinkedCurseEnchantment) PLUMMET,
-                (AbstractLinkedCurseEnchantment) ELECTRIC_ATTRACTION,
-                (AbstractLinkedCurseEnchantment) VOIDING,
-                (AbstractLinkedCurseEnchantment) AQUA_HAUL,
-                (AbstractLinkedCurseEnchantment) CRUMBLING,
-                (AbstractLinkedCurseEnchantment) PRICKING,
-                (AbstractLinkedCurseEnchantment) TORPIDITY,
-                (AbstractLinkedCurseEnchantment) DETERRENCE,
-                (AbstractLinkedCurseEnchantment) SEAS_WOE,
-                (AbstractLinkedCurseEnchantment) GHOST_QUIVER,
-                (AbstractLinkedCurseEnchantment) FLIMSY,
-                (AbstractLinkedCurseEnchantment) SLOW_DRAW,
-                (AbstractLinkedCurseEnchantment) INACCURACY,
-                (AbstractLinkedCurseEnchantment) DROWNING,
-                (AbstractLinkedCurseEnchantment) BOILING_ARROW,
-                (AbstractLinkedCurseEnchantment) MOLTEN_HANDLE,
-                (AbstractLinkedCurseEnchantment) REPULSION,
-                (AbstractLinkedCurseEnchantment) RECOIL,
-                (AbstractLinkedCurseEnchantment) AQUATIC_IMPOTENCE,
-                (AbstractLinkedCurseEnchantment) WHIMSY_BLADE,
-                (AbstractLinkedCurseEnchantment) SCARCITY,
-                (AbstractLinkedCurseEnchantment) DESTITUTION,
-                (AbstractLinkedCurseEnchantment) STAGNATION,
-                (AbstractLinkedCurseEnchantment) BETRAYAL,
-                (AbstractLinkedCurseEnchantment) DEFLECTION
-        );
     }
 }
