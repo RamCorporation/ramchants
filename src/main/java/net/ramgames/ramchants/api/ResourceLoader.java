@@ -37,7 +37,7 @@ public class ResourceLoader implements SimpleResourceReloadListener<ResourceLoad
 
     @Override
     public Identifier getFabricId() {
-        return new Identifier(RamChants.MOD_ID, "api_" + path + "_loader");
+        return Identifier.of(RamChants.MOD_ID, "api_" + path + "_loader");
     }
 
     @Override

@@ -34,7 +34,12 @@
   "enchantment.ramchants.stagnation": "Stagnation",
   "enchantment.ramchants.deflection": "Deflection",
   "enchantment.ramchants.betrayal": "Betrayal",
+  "enchantment.ramchants.snare": "Snare",
+  "enchantment.ramchants.hallow": "Hallow",
 
   "enchantment.minecraft.binding_curse": "Binding",
-  "enchantment.minecraft.vanishing_curse": "Vanishing"
+  "enchantment.minecraft.vanishing_curse": "Vanishing",
+
+  "container.repair.sealed": "Item Is Sealed",
+  "container.repair.too_less_enchantability": "Item Has Too Less Enchantability"
 }

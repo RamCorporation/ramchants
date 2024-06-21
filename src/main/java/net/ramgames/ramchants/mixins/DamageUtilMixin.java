@@ -6,11 +6,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(DamageUtil.class)
-public abstract class DamageUtilMixin {
+public class DamageUtilMixin {
 
     @ModifyArg(method = "getInflictedDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F"), index = 1)
-    private static float allowNegativeProtection(float value){
-        return -20;
+    private static float allowNegativeProtectionToBeApplied(float value) {
+        return -20F;
     }
 
 }

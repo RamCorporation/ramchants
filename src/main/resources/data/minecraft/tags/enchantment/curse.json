@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "ramchants:viscosity",
+    "ramchants:arthropods_favor",
+    "ramchants:explosive_fragility",
+    "ramchants:snare",
+    "ramchants:electric_attraction",
+    "ramchants:hallow",
+    "ramchants:aqua_haul",
+    "ramchants:torpidity",
+    "ramchants:plummet",
+    "ramchants:molten_handle"
+  ]
+}

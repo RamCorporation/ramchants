@@ -2,27 +2,12 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.ramgames.ramchants.mixins",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "BlockMixin",
-    "BowItemMixin",
-    "CrossBowItemMixin",
     "DamageUtilMixin",
-    "EnchantedBookItemMixin",
-    "EnchantmentScreenHandlerMixin",
-    "EnchantRandomlyLootFunctionMixin",
-    "EnchantWithLevelsLootFunctionMixin",
-    "FishingBobberEntityMixin",
-    "FishingRodItemMixin",
-    "GrindstoneScreenHandlerMixin",
-    "ItemMixinArray",
-    "ItemStackMixin",
-    "LightningRodBlockMixin",
-    "LivingEntityMixin",
-    "PersistentProjectileEntityMixin",
-    "PlayerEntityMixin",
-    "ProjectileEntityMixin",
-    "TridentEntityMixin"
+    "EntityAttributesMixin",
+    "LevelsSquaredMixin",
+    "LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
