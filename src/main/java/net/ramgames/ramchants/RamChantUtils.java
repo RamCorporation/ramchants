@@ -1,42 +1,83 @@
 package net.ramgames.ramchants;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.context.LootContext;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.util.math.random.Random;
-import net.ramgames.ramchants.api.Resources;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public interface RamChantUtils {
 
-    static RamChantsItemStackAccess getStackAccess(ItemStack stack) {
-        return (RamChantsItemStackAccess) (FabricItemStack)stack;
-    }
-
-    /*static List<EnchantmentLevelEntry> getFirstCompatible(Random random, Map<Enchantment, Integer> itemEnchants, List<EnchantmentLevelEntry> possibleEnchants) {
+    static List<EnchantmentLevelEntry> getFirstCompatible(Registry<Enchantment> enchantmentReg, Random random, ItemEnchantmentsComponent itemEnchants, List<EnchantmentLevelEntry> possibleEnchants) {
         mainForBlock:
         for(EnchantmentLevelEntry enchantment : possibleEnchants) {
-            if(enchantment.enchantment.isCursed()) continue;
-            if(enchantment.enchantment.isTreasure()) if(random.nextInt(4) == 1) continue;
-            for(Enchantment combinable : itemEnchants.keySet()) {
-                if (enchantment.enchantment == combinable) {
-                    if(combinable.getMaxLevel() == itemEnchants.get(combinable)) continue mainForBlock;
+            if(enchantment.enchantment.isIn(EnchantmentTags.CURSE)) continue;
+            if(enchantment.enchantment.isIn(EnchantmentTags.TREASURE)) if(random.nextInt(4) == 1) continue;
+            for(Object2IntMap.Entry<RegistryEntry<Enchantment>> combinable : itemEnchants.getEnchantmentEntries()) {
+                AtomicReference<Enchantment> enchantAtomic = new AtomicReference<>();
+                RegistryEntry<Enchantment> keyVal = combinable.getKey();
+                keyVal.getKey().ifPresentOrElse(
+                        (item) -> enchantAtomic.set(enchantmentReg.get(item)),
+                        () -> RamChants.LOGGER.error("failed to find enchantment with id: {}", keyVal.getIdAsString())
+                );
+                if(enchantAtomic.get() == null) continue mainForBlock;
+                Enchantment enchant = enchantAtomic.get();
+                if(enchantment.enchantment.value().description() == enchant.description()) {
+                    if(enchant.getMaxLevel() == itemEnchants.getLevel(enchantmentReg.getEntry(enchant))) continue mainForBlock;
                     else continue;
                 }
-                if (!enchantment.enchantment.canCombine(combinable)) continue mainForBlock;
+                if(enchantment.enchantment.value().exclusiveSet().contains(keyVal)) continue mainForBlock;
             }
             return List.of(new EnchantmentLevelEntry(enchantment.enchantment, 1));
         }
         return List.of();
-    }*/
+    }
+
+    static boolean isStackSealed(ItemStack stack) {
+        if(stack.get(ModItemComponents.SEALED) == null) return false;
+        Boolean bool = stack.get(ModItemComponents.SEALED);
+        return bool != null && bool; // had to do this, so the warning system would shut up.
+    }
+
+    static void setSealed(ItemStack stack, boolean val) {
+        stack.set(ModItemComponents.SEALED, val);
+    }
+
+    static int getEnchantabilityWithGrinds(ItemStack stack) {
+        return stack.getItem().getEnchantability() - timesGrinded(stack);
+    }
+
+    static void incrementGrinds(ItemStack stack) {
+        stack.set(ModItemComponents.TIMES_GRINDED, timesGrinded(stack)+1);
+        setSealed(stack, false);
+    }
+
+    @SuppressWarnings("SpellCheckingInspection")
+    static int timesGrinded(ItemStack stack) {
+        Integer grinds = stack.get(ModItemComponents.TIMES_GRINDED);
+        if(grinds == null) return 0;
+        return grinds;
+    }
+
+    static int usedEnchants(ItemStack stack) {
+        AtomicInteger atomic = new AtomicInteger();
+        ItemEnchantmentsComponent enchants = stack.getEnchantments();
+        enchants.getEnchantments().forEach(entry -> atomic.getAndAdd(enchants.getLevel(entry)));
+        return atomic.get();
+    }
 
     /*static Enchantment determineIfApplyCurse(Random random, Enchantment enchantment, int level) {
         if(!Resources.LINKED_CURSES.contains(EnchantmentHelper.getEnchantmentId(enchantment))) return enchantment;

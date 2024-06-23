@@ -4,9 +4,14 @@
   "package": "net.ramgames.ramchants.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BuilderMixin",
     "DamageUtilMixin",
+    "EnchantedBookItemMixin",
+    "EnchantmentHelperMixin",
+    "EnchantmentScreenHandlerMixin",
     "EntityAttributesMixin",
-    "LevelsSquaredMixin",
+    "ItemMixinArray",
+    "ItemStackMixin",
     "LivingEntityMixin"
   ],
   "injectors": {

@@ -9,7 +9,6 @@ import java.util.Set;
 public interface Resources {
 
     RamChantsResource<Integer> ENCHANTABILITY = new RamChantsResource<>();
-    RamChantsResource<Enchantment> LINKED_CURSES = new RamChantsResource<>();
 
     class RamChantsResource<T> {
         private final HashMap<Identifier, T> storage = new HashMap<>();
