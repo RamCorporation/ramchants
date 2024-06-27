@@ -1,21 +1,24 @@
 package net.ramgames.ramchants;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.fabricmc.fabric.api.item.v1.FabricItemStack;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.EnchantmentTags;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
+import net.ramgames.ramchants.api.LinkedEnchantmentCurse;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -60,6 +63,10 @@ public interface RamChantUtils {
         return stack.getItem().getEnchantability() - timesGrinded(stack);
     }
 
+    static int getRemainingEnchantability(ItemStack stack) {
+        return getEnchantabilityWithGrinds(stack) - getUsedEnchantability(stack);
+    }
+
     static void incrementGrinds(ItemStack stack) {
         stack.set(ModItemComponents.TIMES_GRINDED, timesGrinded(stack)+1);
         setSealed(stack, false);
@@ -72,19 +79,27 @@ public interface RamChantUtils {
         return grinds;
     }
 
-    static int usedEnchants(ItemStack stack) {
+    static int getUsedEnchantability(ItemStack stack) {
         AtomicInteger atomic = new AtomicInteger();
-        ItemEnchantmentsComponent enchants = stack.getEnchantments();
+        ItemEnchantmentsComponent enchants = stack.get(getComponentType(stack));
+        if(enchants == null) return 0;
         enchants.getEnchantments().forEach(entry -> atomic.getAndAdd(enchants.getLevel(entry)));
         return atomic.get();
     }
 
-    /*static Enchantment determineIfApplyCurse(Random random, Enchantment enchantment, int level) {
-        if(!Resources.LINKED_CURSES.contains(EnchantmentHelper.getEnchantmentId(enchantment))) return enchantment;
-        if(random.nextBetween(1, level+1) != 1) return enchantment;
-        return Resources.LINKED_CURSES.query(EnchantmentHelper.getEnchantmentId(enchantment));
-    }*/
-
+    static Pair<RegistryEntry<Enchantment>, Boolean> determineIfApplyCurse(World world, Random random, RegistryEntry<Enchantment> enchantmentEntry, int level) {
+        Enchantment enchantment = enchantmentEntry.value();
+        Pair<RegistryEntry<Enchantment>, Boolean> defaultReturn = new Pair<>(enchantmentEntry, false);
+        Registry<LinkedEnchantmentCurse> reg = world.getRegistryManager().get(RamChants.LINKED_CURSE_KEY);
+        Registry<Enchantment> enchantReg = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+        Identifier enchantId = enchantReg.getId(enchantment);
+        if (!reg.containsId(enchantId)) return new Pair<>(enchantmentEntry, false);
+        if (random.nextBetween(1, level + 1) != 1) return defaultReturn;
+        LinkedEnchantmentCurse curse = reg.get(enchantId);
+        if (curse == null) return defaultReturn;
+        Optional<Enchantment> curseEnchant = curse.getLinkedCurse(world.getRegistryManager());
+        return curseEnchant.map(value -> new Pair<>(enchantReg.getEntry(value), true)).orElse(defaultReturn);
+    }
     /*static ItemStack applyEnchantsToLootFunctionResult(int level, ItemStack stack, LootContext context) {
         int iterations = context.getRandom().nextBetween(1,maxEnchantmentLevelsAllowed(level));
         for(int i = 0; i < iterations; i++) {
@@ -109,10 +124,9 @@ public interface RamChantUtils {
         return (int) Math.ceil(-5 * Math.pow(0.5, enchantingLevel/10d)+5);
     }
 
-    static int totalEnchantmentsUsed(Map<Enchantment, Integer> enchantments) {
-        int cost = 0;
-        for(Enchantment enchantment : enchantments.keySet()) cost += enchantments.get(enchantment);
-        return cost;
+    static ComponentType<ItemEnchantmentsComponent> getComponentType(ItemStack stack) {
+        if(stack.isOf(Items.ENCHANTED_BOOK)) return DataComponentTypes.STORED_ENCHANTMENTS;
+        else return DataComponentTypes.ENCHANTMENTS;
     }
 
     static Map<Enchantment, Integer> combineStackEnchantments(Map<Enchantment, Integer> stack1, Map<Enchantment, Integer> stack2) {

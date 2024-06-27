@@ -1,0 +1,37 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "translate": "enchantment.ramchants.boiling_arrow"
+  },
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "affected": "attacker",
+        "effect": {
+          "type": "ramchants:ignite_user",
+          "duration": {
+            "type": "minecraft:linear",
+            "base": 4.0,
+            "per_level_above_first": 4.0
+          }
+        },
+        "enchanted": "attacker"
+      }
+    ]
+  },
+  "exclusive_set": "#ramchants:exclusive_set/boiling_arrow",
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 0
+  },
+  "max_level": 1,
+  "min_cost": {
+    "base": 20,
+    "per_level_above_first": 0
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#minecraft:enchantable/bow",
+  "weight": 2
+}

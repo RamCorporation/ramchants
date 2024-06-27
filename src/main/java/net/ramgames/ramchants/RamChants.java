@@ -7,6 +7,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.ramgames.ramchants.api.LinkedEnchantmentCurse;
 import net.ramgames.ramchants.api.ResourceLoaders;
+import net.ramgames.ramchants.enchantment_components.ModEnchantmentEffects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,10 +18,15 @@ public class RamChants implements ModInitializer {
 
     public static final RegistryKey<Registry<LinkedEnchantmentCurse>> LINKED_CURSE_KEY = RegistryKey.ofRegistry(Identifier.of(MOD_ID, "linked_curse"));
 
+    public static Identifier id(String path) {
+        return Identifier.of(MOD_ID, path);
+    }
+
     @Override
     public void onInitialize() {
         LOGGER.info("Ramchants is preparing something magical!");
         RamChantments.onInitialize();
+        ModEnchantmentEffects.onInitialize();
         ModItemComponents.onInitialize();
         ResourceLoaders.onInitialize();
 

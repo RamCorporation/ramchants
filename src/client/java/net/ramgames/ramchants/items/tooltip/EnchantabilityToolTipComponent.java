@@ -14,9 +14,9 @@ public class EnchantabilityToolTipComponent implements TooltipComponent {
     public EnchantabilityToolTipComponent(EnchantabilityToolTipData tooltipData) {
     this.data = tooltipData;
     if(!data.enchantingScreen()) text = Text.empty();
-    else if(data.usedEnchantability() == 0) text = Text.literal("Enchantability: "+data.enchantability()).formatted(Formatting.DARK_PURPLE);
+    else if(data.usedEnchantability() == 0) text = Text.literal("Enchantability: "+data.enchantability()).formatted(Formatting.DARK_PURPLE).append(data.minusOne() ? " (-1)" : "");
     else if(data.sealed()) text = Text.literal("Enchantability: sealed").formatted(Formatting.DARK_AQUA);
-    else text = Text.literal("Enchantability: "+(data.enchantability()- data.usedEnchantability()) +"/"+data.enchantability()).formatted(Formatting.DARK_PURPLE);
+    else text = Text.literal("Enchantability: "+(data.enchantability()- data.usedEnchantability()) +"/"+data.enchantability()).formatted(Formatting.DARK_PURPLE).append(data.minusOne() ? " (-1)" : "");
     }
 
     @Override

@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipData;
-import net.ramgames.ramchants.ModItemComponents;
+import net.ramgames.ramchants.GrindstoneScreenDuck;
 import net.ramgames.ramchants.RamChantUtils;
 import net.ramgames.ramchants.items.tooltip.EnchantabilityToolTipData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,9 +31,10 @@ public class ClientItemMixin {
     private void getEnchantabilityToolTip(ItemStack stack, CallbackInfoReturnable<Optional<TooltipData>> cir) {
         cir.setReturnValue(Optional.of(new EnchantabilityToolTipData(
                 RamChantUtils.getEnchantabilityWithGrinds(stack),
-                RamChantUtils.usedEnchants(stack),
+                RamChantUtils.getUsedEnchantability(stack),
                 MinecraftClient.getInstance().options.advancedItemTooltips || MinecraftClient.getInstance().currentScreen instanceof EnchantmentScreen || MinecraftClient.getInstance().currentScreen instanceof GrindstoneScreen,
-                RamChantUtils.isStackSealed(stack)
+                RamChantUtils.isStackSealed(stack),
+                (MinecraftClient.getInstance().currentScreen instanceof GrindstoneScreen screen) && ItemStack.areItemsAndComponentsEqual(((GrindstoneScreenDuck) screen).ramchants$getStack(2), stack) && !ItemStack.areItemsAndComponentsEqual(((GrindstoneScreenDuck) screen).ramchants$getStack(1), stack) && !ItemStack.areItemsAndComponentsEqual(((GrindstoneScreenDuck) screen).ramchants$getStack(0), stack)
         )));
     }
 
